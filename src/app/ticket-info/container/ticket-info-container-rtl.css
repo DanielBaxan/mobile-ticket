@@ -8,3 +8,16 @@ NO rtl styles for this component
     float: right;
   }
 }*/
+.reklama {
+  margin-top: 1%;
+  width: 100%;
+  max-height: 300px;
+  max-width: 200px;
+  background: #ccc;
+  margin-right: 2rem;
+  background: #ccc;
+}
+
+:host ::ng-deep .carousel-arrows {
+  display: none;
+}

@@ -24,6 +24,7 @@
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "@schematics/angular": "^9.1.0",
+    "angular-responsive-carousel": "^2.1.2",
     "bootstrap": "4.1.1",
     "core-js": "^2.5.0",
     "dont-sniff-mimetype": "^1.1.0",

@@ -1,5 +1,11 @@
 .list-container {
   margin-top: 1em;
+  /* TODO  - show more than one column, inline->to flex  */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
+  align-items: stretch;
 }
 
 /* Hide scroll bar

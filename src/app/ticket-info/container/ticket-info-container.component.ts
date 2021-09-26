@@ -1,20 +1,31 @@
-import { Component, ViewChild, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { QueueEntity } from '../../entities/queue.entity';
-import { Util } from '../../util/util';
-import { BranchEntity } from '../../entities/branch.entity';
-import { TranslateService } from '@ngx-translate/core';
-import { Config } from '../../config/config';
-import { TicketInfoService } from '../ticket-info.service';
-import { VisitState } from '../../util/visit.state';
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter,
+} from "@angular/core";
+import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
+import { Subscription } from "rxjs";
+import { QueueEntity } from "../../entities/queue.entity";
+import { Util } from "../../util/util";
+import { BranchEntity } from "../../entities/branch.entity";
+import { TranslateService } from "@ngx-translate/core";
+import { Config } from "../../config/config";
+import { TicketInfoService } from "../ticket-info.service";
+import { VisitState } from "../../util/visit.state";
 
 declare var MobileTicketAPI: any;
 
 @Component({
-  selector: 'app-ticket-info-container',
-  templateUrl: './ticket-info-container-tmpl.html',
-  styleUrls: ['./ticket-info-container.css', './ticket-info-container-rtl.css', '../../shared/css/common-styles.css']
+  selector: "app-ticket-info-container",
+  templateUrl: "./ticket-info-container-tmpl.html",
+  styleUrls: [
+    "./ticket-info-container.css",
+    "./ticket-info-container-rtl.css",
+    "../../shared/css/common-styles.css",
+  ],
 })
 export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public branchEntity: BranchEntity;
@@ -45,13 +56,23 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public isMeetingAvailable: boolean;
   private eventSub: Subscription;
   public redirectUrlLoading: boolean;
+  public images = [
+    { path: "/assets/testImage.jpg" },
+    { path: "/assets/zebra.jpg" },
+    { path: "/assets/camel.jpg" },
+  ];
 
-  @ViewChild('ticketNumberComponent', {static: true}) ticketNumberComponent;
-  @ViewChild('queueComponent', {static: true}) queueComponent;
-  @ViewChild('cancelVisitComponent', {static: true}) cancelVisitComponent;
+  @ViewChild("ticketNumberComponent", { static: true }) ticketNumberComponent;
+  @ViewChild("queueComponent", { static: true }) queueComponent;
+  @ViewChild("cancelVisitComponent", { static: true }) cancelVisitComponent;
 
-  constructor(private ticketService: TicketInfoService, public router: Router, private translate: TranslateService,
-    private config: Config, private activatedRoute: ActivatedRoute) {
+  constructor(
+    private ticketService: TicketInfoService,
+    public router: Router,
+    private translate: TranslateService,
+    private config: Config,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.isTicketFlashed = false;
     this.isTicketEndedOrDeleted = false;
     this.isVisitCall = false;
@@ -66,15 +87,15 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.isMeetingAvailable = false;
     this.redirectUrlLoading = false;
 
-    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
-   }
-   this.eventSub = this.router.events.subscribe((evt) => {
-    if (evt instanceof NavigationEnd) {
-       // trick the Router into believing it's last link wasn't previously loaded
-       this.router.navigated = false;
-    }
-});
+    };
+    this.eventSub = this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        // trick the Router into believing it's last link wasn't previously loaded
+        this.router.navigated = false;
+      }
+    });
 
     this.getSelectedBranch();
 
@@ -90,19 +111,21 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     */
   }
 
-  ngOnInit() {
+  openSite() {
+    window.open("https://www.google.com/");
+  }
 
+  ngOnInit() {
     this.scrollPageToTop();
     this.loadNotificationSound();
     this.setRtlStyles();
     this.loadTranslations();
-
   }
 
   loadTranslations() {
-    this.translate.get('ticketInfo.titleYourTurn').subscribe((res: string) => {
+    this.translate.get("ticketInfo.titleYourTurn").subscribe((res: string) => {
       this.title1 = res;
-      this.translate.get('ticketInfo.ticketReady').subscribe((res: string) => {
+      this.translate.get("ticketInfo.ticketReady").subscribe((res: string) => {
         this.title2 = res;
       });
     });
@@ -112,10 +135,9 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     return this._isAfterCalled;
   }
 
-
   loadNotificationSound() {
-    let fileName = this.config.getConfig('notification_sound');
-    this.notificaitonSound.src = './app/resources/' + fileName;
+    let fileName = this.config.getConfig("notification_sound");
+    this.notificaitonSound.src = "./app/resources/" + fileName;
     this.notificaitonSound.load();
     this.isSoundPlay = false;
   }
@@ -151,7 +173,6 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-
   public setVisitCancelCalled(called) {
     this.isCalled = called;
   }
@@ -162,7 +183,6 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
 
   isConfirmed(): boolean {
     return this.cancelVisitComponent.isConfirmed();
-
   }
 
   isVisitCanceledOnce(): boolean {
@@ -180,9 +200,8 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public onServiceNameUpdate(serviceName) {
     let serviceNme = undefined;
     if (serviceName === null) {
-      serviceNme = 'null';
-    }
-    else {
+      serviceNme = "null";
+    } else {
       serviceNme = serviceName;
     }
     this.ticketNumberComponent.onServiceNameUpdate(serviceNme);
@@ -199,11 +218,14 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.prevVisitState = visitStatus.status;
       let currentEvent = MobileTicketAPI.getCurrentVisitStatus();
       let firstName = currentEvent.firstName;
-	    let lastName = currentEvent.lastName;
+      let lastName = currentEvent.lastName;
       let servicePoint = currentEvent.servicePointName;
       this.updateVisitCallMsg(firstName, servicePoint, lastName);
       this.isVisitCall = true;
-      if (MobileTicketAPI.meetingUrl !== 'Not present' && MobileTicketAPI.meetingUrl !== undefined) {
+      if (
+        MobileTicketAPI.meetingUrl !== "Not present" &&
+        MobileTicketAPI.meetingUrl !== undefined
+      ) {
         this.isMeetingAvailable = true;
       } else {
         this.isMeetingAvailable = false;
@@ -214,15 +236,13 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
 
       this.tmpBranchId = MobileTicketAPI.getSelectedBranch().id;
       this.tmpVisitId = MobileTicketAPI.getCurrentVisit().visitId;
-    }
-    else if (visitStatus.status === this.visitState.DELAYED) {
+    } else if (visitStatus.status === this.visitState.DELAYED) {
       this.prevVisitState = this.visitState.DELAYED;
       this.isVisitCall = false;
       this.isVisitRecycled = true;
       this.queueComponent.onVisitRecycled(true);
       this.isMeetingAvailable = false;
-    }
-    else if (visitStatus.status === this.visitState.IN_QUEUE) {
+    } else if (visitStatus.status === this.visitState.IN_QUEUE) {
       this.isSoundPlay = false;
       this.isTicketFlashed = false;
       this.prevVisitState = this.visitState.IN_QUEUE;
@@ -230,12 +250,10 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.isVisitRecycled = false;
       this.queueComponent.onVisitRecycled(false);
       this.isMeetingAvailable = false;
-    }
-    else if (visitStatus.status === this.visitState.CACHED) {
+    } else if (visitStatus.status === this.visitState.CACHED) {
       if (this.prevVisitState === this.visitState.CALLED) {
         this._isAfterCalled = true;
-      }
-      else {
+      } else {
         this._isAfterCalled = false;
       }
 
@@ -251,12 +269,10 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       MobileTicketAPI.resetCurrentVisitStatus();
       this.stopNotificationSound();
       this.openCustomerFeedback(this.tmpBranchId, this.tmpVisitId);
-    }
-    else if (visitStatus && visitStatus.visitPosition === null) {
+    } else if (visitStatus && visitStatus.visitPosition === null) {
       if (this.prevVisitState === this.visitState.CALLED) {
         this._isAfterCalled = true;
-      }
-      else {
+      } else {
         this._isAfterCalled = false;
       }
 
@@ -282,10 +298,11 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   openCustomerFeedback(branchId, visitId) {
     this.redirectUrlLoading = true;
     if (this.isTicketEndedOrDeleted === true && this.isAfterCalled) {
-      let customerFeedBackUrl = this.config.getConfig('customer_feedback');
-      if (new Util().isValidUrl(customerFeedBackUrl)){
+      let customerFeedBackUrl = this.config.getConfig("customer_feedback");
+      if (new Util().isValidUrl(customerFeedBackUrl)) {
         if (customerFeedBackUrl && customerFeedBackUrl.length > 0) {
-          customerFeedBackUrl = customerFeedBackUrl + '?' + 'b=' + branchId + '&' + 'v=' + visitId;
+          customerFeedBackUrl =
+            customerFeedBackUrl + "?" + "b=" + branchId + "&" + "v=" + visitId;
           window.location.href = customerFeedBackUrl;
         } else {
           this.redirectUrlLoading = false;
@@ -298,11 +315,15 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateVisitCallMsg(firstName: string, servicePointName: string, lastName: string, ) {
-    if (firstName !== null && firstName !== '' && servicePointName !== '') {
+  updateVisitCallMsg(
+    firstName: string,
+    servicePointName: string,
+    lastName: string
+  ) {
+    if (firstName !== null && firstName !== "" && servicePointName !== "") {
       this.visitCallMsgOne = this.title1;
-      this.visitCallMsg = this.title2.replace('{firstName}', firstName );
-	  this.visitCallMsg = this.visitCallMsg.replace('{lastName}', lastName );
+      this.visitCallMsg = this.title2.replace("{firstName}", firstName);
+      this.visitCallMsg = this.visitCallMsg.replace("{lastName}", lastName);
       this.visitCallMsgThree = servicePointName;
       if (this.ticketNumberComponent && !this.isTicketFlashed) {
         this.isTicketFlashed = true;
@@ -312,20 +333,20 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   updateBrowserTitle(visitStatus: QueueEntity) {
-    let title = '';
-    this.translate.get('ticketInfo.defaultTitle').subscribe((res: string) => {
+    let title = "";
+    this.translate.get("ticketInfo.defaultTitle").subscribe((res: string) => {
       title = res;
     });
-    if (visitStatus.visitPosition === null && visitStatus.status === 'CALLED') {
-      this.translate.get('ticketInfo.titleYourTurn').subscribe((res: string) => {
-        title = res;
+    if (visitStatus.visitPosition === null && visitStatus.status === "CALLED") {
+      this.translate
+        .get("ticketInfo.titleYourTurn")
+        .subscribe((res: string) => {
+          title = res;
+        });
+    } else if (visitStatus.visitPosition > 0) {
+      this.translate.get("ticketInfo.titleInLine").subscribe((res: string) => {
+        title = res + " " + visitStatus.visitPosition;
       });
-    }
-    else if (visitStatus.visitPosition > 0) {
-      this.translate.get('ticketInfo.titleInLine').subscribe((res: string) => {
-        title = res + ' ' + visitStatus.visitPosition;
-      });
-
     }
     document.title = title;
   }
@@ -337,8 +358,16 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
      * reset vars to fetch branchId from cache
      */
     let visitInfo = MobileTicketAPI.getCurrentVisit();
-    if (!this.isUrlAccessedTicket && visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
-      if (MobileTicketAPI.getCurrentVisit().branchId !== MobileTicketAPI.getSelectedBranch().id) {
+    if (
+      !this.isUrlAccessedTicket &&
+      visitInfo &&
+      visitInfo !== null &&
+      visitInfo.visitStatus !== "DELETE"
+    ) {
+      if (
+        MobileTicketAPI.getCurrentVisit().branchId !==
+        MobileTicketAPI.getSelectedBranch().id
+      ) {
         MobileTicketAPI.resetAllVars();
       }
     }
@@ -352,7 +381,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   setRtlStyles() {
-    if (document.dir === 'rtl') {
+    if (document.dir === "rtl") {
       this.isRtl = true;
     } else {
       this.isRtl = false;
