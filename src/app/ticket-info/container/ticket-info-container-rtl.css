@@ -8,14 +8,21 @@ NO rtl styles for this component
     float: right;
   }
 }*/
+.custom-box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
 .reklama {
-  margin-top: 1%;
-  width: 100%;
+  margin: 3% 1% 0 1%;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  /* width: 95%; */
+  max-width: 400px;
+  /* display: flex;
+  
   max-height: 300px;
-  max-width: 200px;
-  background: #ccc;
-  margin-right: 2rem;
-  background: #ccc;
+  max-width: 200px; */
 }
 
 :host ::ng-deep .carousel-arrows {
