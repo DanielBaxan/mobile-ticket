@@ -27,14 +27,13 @@
         (onVisitStatusUpdate)="onVisitStatusUpdate($event)"
       ></app-queue-container>
     </div>
-    <div
-      class="row"
-      [hidden]="isVisitCall && !isVisitRecycled"
-      style="display: flex; justify-content: center"
-    >
+    <div class="row custom-row" [hidden]="isVisitCall && !isVisitRecycled">
+      <!-- style="display: flex; justify-content: center" -->
       <!-- //TODO - reklama row -->
       <div class="reklama" (click)="openSite()">
         <carousel
+          class="custom-carousel"
+          [height]="userScreenHeight"
           [images]="images"
           arrows="false"
           arrowsOutside="true"

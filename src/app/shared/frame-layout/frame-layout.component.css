@@ -1,16 +1,19 @@
-@font-face {font-family: "Roboto-Light";
+@font-face {
+  font-family: "Roboto-Light";
   src: url("/app/resources/Roboto-Light.ttf");
 }
 
-@font-face {font-family: "Roboto-Bold";
+@font-face {
+  font-family: "Roboto-Bold";
   src: url("/app/resources/Roboto-Bold.ttf");
 }
 
-@font-face {font-family: "Roboto-Regular";
+@font-face {
+  font-family: "Roboto-Regular";
   src: url("/app/resources/Roboto-Regular.ttf");
 }
 
-#app-bg{
+#app-bg {
   background: url(/app/resources/background.jpg);
   background-size: cover !important;
   background-position: center center !important;
@@ -22,21 +25,21 @@
   z-index: -1;
 }
 
-.not-support-view{
+.not-support-view {
   height: 100%;
 }
 
 .caption {
   text-align: center;
   font-size: 2em;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .center-text {
   text-align: center;
 }
 
-.logo-container{
+.logo-container {
   display: inline-block;
   height: 100%;
   vertical-align: middle;
@@ -47,11 +50,14 @@
   background: transparent !important;
 }
 
-.full-with{
+.full-with {
   width: 100%;
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
 }
 
-.logo{
+.logo {
   width: 160px;
   max-width: 160px;
   margin: 0 auto;
@@ -62,6 +68,7 @@
   height: 5em;
   text-align: center;
   max-height: 10em;
+  /* flex-grow: 1; */
 }
 
 .helper {
@@ -72,8 +79,8 @@
 
 /* Media Queries */
 /* Small phones */
-@media (max-width: 450px), (max-height: 450px){
-  .logo{
+@media (max-width: 450px), (max-height: 450px) {
+  .logo {
     width: 110px;
   }
 

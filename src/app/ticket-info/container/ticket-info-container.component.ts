@@ -61,6 +61,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     { path: "/assets/zebra.jpg" },
     { path: "/assets/camel.jpg" },
   ];
+  public userScreenHeight = window.screen.availWidth > 400 ? 200 : 125;
 
   @ViewChild("ticketNumberComponent", { static: true }) ticketNumberComponent;
   @ViewChild("queueComponent", { static: true }) queueComponent;
@@ -98,7 +99,6 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     });
 
     this.getSelectedBranch();
-
     /**
      * this is commented
      * Issue: once called and ended a ticket and next time issued a ticket
